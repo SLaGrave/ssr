@@ -1,3 +1,9 @@
+// Vector3 Import code and utility
+mod my_vec3;
+use my_vec3::MyVec3 as MyPoint3;
+use my_vec3::MyVec3 as MyColor;
+use my_vec3::write_color;
+
 fn main() {
 
     // Image
@@ -12,15 +18,8 @@ fn main() {
     for j in (0..IMAGEHEIGHT).rev() {
         eprintln!("Scanlines remaining: {}", j);
         for i in 0..IMAGEWIDTH {
-            let r: f32 = (i as f32)/((IMAGEWIDTH-1) as f32);
-            let g: f32 = (j as f32)/((IMAGEHEIGHT-1) as f32);
-            let b: f32 = 0.25;
-
-            let ir: i32 = (255.999 * r) as i32;
-            let ig: i32 = (255.999 * g) as i32;
-            let ib: i32 = (255.999 * b) as i32;
-
-            println!("{} {} {}", ir, ig, ib);
+            let tmp = MyColor::new((i as f64)/((IMAGEWIDTH-1) as f64), (j as f64)/((IMAGEHEIGHT-1) as f64), 0.25);
+            write_color(tmp);
         }
     }
     eprintln!("Done.");
