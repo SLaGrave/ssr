@@ -1,26 +1,30 @@
-// Vector3 Import code and utility
-mod my_vec3;
-use my_vec3::MyVec3 as MyPoint3;
-use my_vec3::MyVec3 as MyColor;
-use my_vec3::write_color;
+use std::io::{stderr, Write};
 
 fn main() {
+    const IMAGE_WIDTH: u64 = 256;
+    const IMAGE_HEIGHT: u64 = 256;
 
-    // Image
-    const IMAGEWIDTH: i32 = 256;
-    const IMAGEHEIGHT: i32 = 256;
-
-    // Render
+    // Header
     println!("P3");
-    println!("{} {}", IMAGEWIDTH, IMAGEHEIGHT);
+    println!("{} {}", IMAGE_WIDTH, IMAGE_HEIGHT);
     println!("255");
 
-    for j in (0..IMAGEHEIGHT).rev() {
-        eprintln!("Scanlines remaining: {}", j);
-        for i in 0..IMAGEWIDTH {
-            let tmp = MyColor::new((i as f64)/((IMAGEWIDTH-1) as f64), (j as f64)/((IMAGEHEIGHT-1) as f64), 0.25);
-            write_color(tmp);
+    // Colors
+    for j in (0..IMAGE_HEIGHT).rev() {
+        eprint!("\rScanlines remaining: {:3}", IMAGE_HEIGHT-j-1);
+        stderr().flush().unwrap();
+
+        for i in 0..IMAGE_WIDTH {
+            let r: f64 = (i as f64) / ((IMAGE_WIDTH - 1) as f64);
+            let g: f64 = (j as f64) / ((IMAGE_HEIGHT - 1) as f64);
+            let b: f64 = 0.25;
+            
+            let ir = (255.999 * r) as u64;
+            let ig = (255.999 * g) as u64;
+            let ib = (255.999 * b) as u64;
+
+            println!("{} {} {}", ir, ig, ib);
         }
     }
-    eprintln!("Done.");
+    eprintln!("\nDone");
 }
